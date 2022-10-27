@@ -17,13 +17,17 @@
                         @if (  \Carbon\Carbon::now()->format('H') >= \Carbon\Carbon::parse($time->time_sales)->subHour(1)->format('H') &&
                                \Carbon\Carbon::now()->format('H') <= \Carbon\Carbon::parse($time->time_sales)->addHour(1)->format('H'))
                               {{\Carbon\Carbon::parse($time->time_sales)->format('h:i A')}}
-                              {{-- @break --}}
+                              @break
                         @else
-                        {{-- <span class="text-danger text-center fw-bold">No Houre Sales</span> --}}
-                        {{-- @break --}}
+                        @if ($times->count() == $loop->index +1)
+                        <span class="text-danger text-center fw-bold">No Houre Sales</span>
+
+                        @break
                         @endif
 
+                        @endif
                     @endforeach
+
                 </div>
                 <form action="/insert/sales" method="POST">
                     @csrf
