@@ -14,18 +14,18 @@
                 <div class="card-header">
                     <span class="text-black  text-center fw-bold">  Selse </span>
                     @foreach ($times as $time)
-                        @if (  $timeadd >= \Carbon\Carbon::parse($time->time_sales)->format('h:i A')
-                        && $timesub <= \Carbon\Carbon::parse($time->time_sales)->format('h:i A') )
+                        @if (  \Carbon\Carbon::now()->format('H') >= \Carbon\Carbon::parse($time->time_sales)->subHour(1)->format('H') &&
+                               \Carbon\Carbon::now()->format('H') <= \Carbon\Carbon::parse($time->time_sales)->addHour(1)->format('H'))
                               {{\Carbon\Carbon::parse($time->time_sales)->format('h:i A')}}
                               {{-- @break --}}
                         @else
-                        <span class="text-danger text-center fw-bold">No Houre Sales</span>
-                        @break
+                        {{-- <span class="text-danger text-center fw-bold">No Houre Sales</span> --}}
+                        {{-- @break --}}
                         @endif
 
                     @endforeach
                 </div>
-                <form action="" method="POST">
+                <form action="/insert/sales" method="POST">
                     @csrf
                         <div class="card-body">
                                 <select  class="form-select" name="branch">

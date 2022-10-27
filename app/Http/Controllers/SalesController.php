@@ -35,5 +35,25 @@ class SalesController extends Controller
         return view('newsales',compact('branches','times','timeadd','timesub'));
     }
 
+    public function insertsales(Request $request)
+    {
+        $times = times::whereActive(0)->get();
 
+
+        $timenw = Carbon::now()->format('H');
+        $dd='';
+        foreach ($times as $time){
+            if($timenw >= Carbon::parse($time->time_sales)->subHour(1)->format('H')&&
+             $timenw  <= Carbon::parse($time->time_sales)->addHour(1)->format('H')  ){
+            $dd=$time->time_sales;
+           }
+        }
+
+        dd( $dd);
+
+
+        $request['time'] = 'sss';
+        dd($request->all());
+        return view('newsales',compact('branches','times','timeadd','timesub'));
+    }
 }

@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/view/sales',[SalesController::class,'index'])->name('sales');
-Route::get('/new/sales',[SalesController::class,'newsales'])->name('sales');
+Route::get('/view/sales',[SalesController::class,'index'])->name('viewsales');
+Route::get('/new/sales',[SalesController::class,'newsales'])->name('newsales');
+Route::Post('/insert/sales',[SalesController::class,'insertsales'])->name('insertsales');
 Route::get('/', function () {
     return view('layouts.master');
 });

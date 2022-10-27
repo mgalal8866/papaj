@@ -15,11 +15,12 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('sales');
-            $table->unsignedBigInteger('time_id');
+            $table->string('sales')->nullable();
+            $table->unsignedBigInteger('time_id')->nullable();
             $table->foreign('time_id')->references('id')->on('times')->onDelete('cascade');
             $table->unsignedBigInteger('branch_id');
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->string('close')->nullable();
             $table->timestamps();
         });
     }
