@@ -77,4 +77,41 @@
 @endsection
 
 @section('js')
+<script>
+var firebaseConfig = {
+apiKey: "AIzaSyBreRvgcE1Kq2Mo8E4LSj9nEExRyGGMXW0",
+authDomain: "papaj-ea7bd.firebaseapp.com",
+projectId: "papaj-ea7bd",
+storageBucket: "papaj-ea7bd.appspot.com",
+messagingSenderId: "590651543681",
+appId: "1:590651543681:web:4e05f52d8eab32c08cfd80",
+measurementId: "G-TQEEHQQ296"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+const messaging = firebase.messaging();
+
+function initFirebaseMessagingRegistration() {
+    messaging.requestPermission().then(function () {
+        return messaging.getToken()
+    }).then(function(token,admin=1) {
+    axios.post("{{ route('fcmToken') }}",{_method:"POST",token,admin
+        }).then(({data})=>{
+            console.log(data)
+        }).catch(({response:{data}})=>{
+            console.error(data)
+        })
+
+    }).catch(function (err) {
+        console.log(`Token Error :: ${err}`);
+    });
+}
+
+initFirebaseMessagingRegistration();
+
+messaging.onMessage(function({data:{body,title}}){
+    new Notification(title, {body});
+});
+</script>
 @endsection

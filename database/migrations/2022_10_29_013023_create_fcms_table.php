@@ -16,6 +16,9 @@ class CreateFcmsTable extends Migration
         Schema::create('fcms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('fcm_token')->nullable();
+            $table->text('ip')->nullable();
+            $table->json('agent')->nullable();
+            $table->boolean('admin')->default(0)->comment('0 to user 1 to admin');
             $table->timestamps();
         });
     }

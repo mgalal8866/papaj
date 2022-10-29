@@ -84,10 +84,6 @@
 @endsection
 
 @section('js')
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-messaging.js"></script>
 
 <script>
     // Your web app's Firebase configuration
@@ -116,11 +112,9 @@
     function initFirebaseMessagingRegistration() {
         messaging.requestPermission().then(function () {
             return messaging.getToken()
-        }).then(function(token) {
-           
-            axios.post("{{ route('fcmToken') }}",{
-                _method:"POST",
-                token
+        }).then(function(token,admin=1) {
+
+            axios.post("{{ route('fcmToken') }}",{_method:"POST",token
             }).then(({data})=>{
                 console.log(data)
             }).catch(({response:{data}})=>{
