@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FcmController;
+use App\Http\Controllers\SalesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/view/sales',[SalesController::class,'index'])->name('viewsales');
 Route::get('/new/sales',[SalesController::class,'newsales'])->name('newsales');
 Route::Post('/insert/sales',[SalesController::class,'insertsales'])->name('insertsales');
+Route::Post('/fcm-token', [FcmController::class, 'updateToken'])->name('fcmToken');
+
 Route::get('/', function () {
     return view('layouts.master');
 });

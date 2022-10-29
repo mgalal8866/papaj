@@ -14,23 +14,35 @@ class SalesController extends Controller
     public function time_sale()
     {
         $times    = times::whereActive(0)->get();
-        $timenw   = Carbon::now()->format('H');
-
+        // $timenw   = Carbon::now()->format('H');
+//        $rr= times::whereId(3)->get();
+// dd( Carbon::parse($rr[0]->time_sales)->format('H'));
+$timenw = '23';
         foreach ($times as $index => $time){
-            if( $timenw >= Carbon::parse($time->time_sales)->subHour(1)->format('H')&&
-                $timenw <= Carbon::parse($time->time_sales)->addHour(1)->format('H'))
+
+
+            if( $timenw >= Carbon::parse($time->time_sales)->subHour(1)->format('H') &&
+                $timenw <= Carbon::parse($time->time_sales)->addHour(1)->format('H') || $timenw == Carbon::parse($time->time_sales)->format('H') )
             {
-                $timesales=['id'=>$time->id,'timesales'=>$time->time_sales];
+                 $timesales=['id'=>$time->id,'timesales'=>$time->time_sales];
                 break;
             }
             else{
-                if ($times->count() == $index + 1){
-                    $timesales = null;
-                    break;
-                }
+                // dd( Carbon::parse('12:00 Am')->subHour(1)->format('H'));
+                // $timenw >= Carbon::parse($time->time_sales)->subHour(1)->format('H') && ($timenw >= 23) ||
+                // if($timenw == Carbon::parse($time->time_sales)->format('H') ||  $timenw > Carbon::parse($time->time_sales)->addHour(1)->format('H')){
+                //     $timesales=['id'=>$time->id,'timesales'=>$time->time_sales,'s'=> Carbon::parse($time->time_sales)->addHour(1)->format('H')];
+                //     break;
+                // }elseif($times->count() == ($index + 1)){
+                //     $timesales = null;
+                //     break;
+
+                // }
             }
+
         }
-        return $timesales??null;
+
+         return $timesales??null;
     }
 
     public function index()
@@ -46,11 +58,16 @@ class SalesController extends Controller
         $branches   = branch::whereActive(0)->get();
         $times      = times::whereActive(0)->get();
         $timesales  = $this->time_sale();
+        // dd($timesales);
         return view('newsales',compact('branches','times','timesales'));
     }
 
     public function insertsales(Request $request)
     {
+
+        // if (date("H") >= 0 && date("H") <= 8) {
+        //     return date('Y-m-d', strtotime("-1 day"));
+        //     }
         $Sales = sales::whereDate('created_at', Carbon::today())->where('time_id',$request->time_sales)->where('branch_id',$request->branch)->get();
             if($Sales->count() > 0){
 
@@ -61,9 +78,10 @@ class SalesController extends Controller
                         'sales'     => $request->time_sales?$request->sales:null,
                         'time_id'   => $request->time_sales??null,
                         'branch_id' => $request->branch,
-                        'close'     => $request->time_sales?null:$request->sales
+                        'close'     => $request->time_sales?null:$request->sales,
+                        'created_at' => (date("H") >= 0 && date("H") <= 8)? date('Y-m-d', strtotime("-1 day")): ''
                     ]);
-                $request->session()->flash('alert-success', 'jl');
+                $request->session()->flash('alert-success', 'DONE !');
                 return Redirect::to('/new/sales');
             }
 
