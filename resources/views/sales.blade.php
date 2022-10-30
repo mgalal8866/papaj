@@ -28,7 +28,8 @@
                 {{-- {{ $time->time_sales->format('H:i:s') ?? '' }}  --}}
                     <th>{{$time->time_sales}}</th>
                 @endforeach
-                <th>Close</th>
+                <th>Sales</th>
+                <th>T.C</th>
             </tr>
         </thead>
         <tbody>
@@ -51,7 +52,7 @@
                         </td>
                     @endforeach
                     <td>{{($sales->where('branch_id',$branch->id )->where('time_id',null )->first()->close??'0')}}</td>
-
+                    <td>{{($sales->where('branch_id',$branch->id )->where('time_id',null )->first()->tc??'0')}}</td>
                 </tr>
             @endforeach
             <tr class="bg-secondary text-white">
@@ -67,6 +68,7 @@
                     @endforeach
                 </td>
                 @endforeach
+                <td class="text-white fw-bold"> #</td>
                 <td class="text-white fw-bold"> #</td>
             </tr>
 

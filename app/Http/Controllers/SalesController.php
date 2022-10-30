@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Carbon\Carbon;
 use App\Models\fcm;
 use App\Models\sales;
@@ -22,7 +23,7 @@ class SalesController extends Controller
     {
         $times    = times::whereActive(0)->get();
         $timenw   = Carbon::now()->format('H');
-        $timenw   = '02';
+         $timenw   = '16';
         foreach ($times as $index => $time){
             switch(true)
                 {
@@ -33,7 +34,7 @@ class SalesController extends Controller
                         return   $timesales=['id'=>$time->id,'timesales'=>$time->time_sales];
                         break;
                     case ($timenw >= 1) && ($timenw  <= 8) :
-                        return   $timesales=['id'=>null,'timesales'=>'Close time'];
+                        return   $timesales=['id'=> null,'timesales'=>'Close time'];
                          break;
                     case $times->count() == ($index + 1):
                         return $timesales =  null;
@@ -42,7 +43,6 @@ class SalesController extends Controller
                     // return $timesales = null;
                 }
         }
-
          return $timesales;
     }
 
@@ -80,7 +80,6 @@ class SalesController extends Controller
     // }
     public function index( )
     {
-
         $times = times::whereActive(0)->get();
         $branches = branch::whereActive(0)->get();
         $sales = sales::whereDate('created_at', Carbon::today())->get();
@@ -91,19 +90,13 @@ class SalesController extends Controller
         $branches   = branch::whereActive(0)->get();
         $times      = times::whereActive(0)->get();
         $timesales  = $this->time_test();
-
         return view('newsales',compact('branches','times','timesales'));
     }
     public function insertsales(Request $request)
     {
-
-        // if (date("H") >= 0 && date("H") <= 8) {
-        //     return date('Y-m-d', strtotime("-1 day"));
-        //     }
         $Sales = sales::whereDate('created_at', Carbon::today())->where('time_id',$request->time_sales)->where('branch_id',$request->branch)->get();
             if($Sales->count() > 0){
-
-                $request->session()->flash('alert-success', 'User was successful added!');
+                toastr()->info('You have send sales before . Edit Seles is done','Edit');
                 return Redirect::to('/new/sales');
             }else{
                 sales::create([
@@ -111,9 +104,10 @@ class SalesController extends Controller
                         'time_id'   => $request->time_sales??null,
                         'branch_id' => $request->branch,
                         'close'     => $request->time_sales?null:$request->sales,
+                        'tc'        => $request->ctc??null,
                         'created_at' => (date("H") >= 0 && date("H") <= 8)? date('Y-m-d', strtotime("-1 day")):Carbon::now()
                     ]);
-                $request->session()->flash('alert-success', 'DONE !');
+                toastr()->success('Send Seles','New');
                 return Redirect::to('/new/sales');
             }
 

@@ -32,52 +32,74 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card m-5">
-                <div class="card-header text-center">
-                    <span class="text-black  text-center fw-bold "> Selse </span>
-                    @if ($timesales != null)
-                        {{ $timesales['timesales'] }}
-                    @else
-                        <div class="alert alert-danger text-center d-flex align-items-center" role="alert">
-                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
-                                aria-label="Danger:">
-                                <use xlink:href="#exclamation-triangle-fill" />
-                            </svg>
-                            <div>
-                                No Houre Sales / Close time
+            @if ($timesales != null)
+                <div class="card m-5 shadow border-secondary border-outline-success">
+                    <div class="card-header text-center">
+                        <span class="text-black  text-center fw-bold "> Selse </span>
+                        @if ($timesales != null)
+                            {{ $timesales['timesales'] }}
+                        @else
+                            <div class="alert alert-danger text-center d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
+                                    aria-label="Danger:">
+                                    <use xlink:href="#exclamation-triangle-fill" />
+                                </svg>
+                                <div>
+                                    No Houre Sales / Close time
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    <form action="/insert/sales" method="POST">
+                        @csrf
+                        <div class="card-body">
+                            <input type="number" hidden name="time_sales"
+                                value="{{ $timesales != null ? $timesales['id'] : null }}">
+                            <div class="mb-3">
+                                <label for="selectbranch" class="form-label">Branch </label>
+                                <select class="form-select" id="selectbranch" name="branch" required>
+                                    <option selected value="">Choose Branch</option>
+                                    @foreach ($branches as $branch)
+                                        <option value="{{ $branch->id }}"> {{ $branch->name }} -
+                                            <span class="badge bg-info text-dark">Last: {{ $branch->close }} </span>
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="salestext" class="form-label">Sales</label>
+                                <input type="number" step="any" class="form-control" id="salestext" name="sales" placeholder="" required>
+                            </div>
+                            @if ($timesales != null)
+                                @if ($timesales['id'] == null )
+                                <div class="mb-3">
+                                    <label for="ctc" class="form-label">T.C C.Y (عمليات حالى):</label>
+                                    <input type="number" step="any" class="form-control" id="ctc" name="ctc" placeholder="" required>
+                                </div>
+                                @endif
+                            @endif
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-danger btn-block">Send</button>
                             </div>
                         </div>
-                    @endif
+                    </form>
+
                 </div>
-                <form action="/insert/sales" method="POST">
-                    @csrf
-                    <div class="card-body">
-                        <input type="number" hidden name="time_sales"
-                            value="{{ $timesales != null ? $timesales['id'] : null }}">
-                        <div class="mb-3">
-                            <label for="selectbranch" class="form-label">Branch </label>
-                            <select class="form-select" id="selectbranch" name="branch" required>
-                                <option selected value="">Choose Branch</option>
-                                @foreach ($branches as $branch)
-                                    <option value="{{ $branch->id }}"> {{ $branch->name }} -
-                                        <span class="badge bg-info text-dark">Last: {{ $branch->close }} </span>
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="salestext" class="form-label">Sales</label>
-                            <input type="number" step="any" class="form-control" id="salestext" name="sales"
-                                placeholder="" required>
-                        </div>
+            @else
+                <div class="alert alert-danger text-center d-flex align-items-center m-5" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
+                        aria-label="Danger:">
+                        <use xlink:href="#exclamation-triangle-fill" />
+                    </svg>
+                    <div>
+                        No Houre Sales
                     </div>
-                    <div class="card-footer">
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-success btn-block">Send</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+            @endif
         </div>
     </div>
 
