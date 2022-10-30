@@ -23,7 +23,7 @@ class SalesController extends Controller
     {
         $times    = times::whereActive(0)->get();
         $timenw   = Carbon::now()->format('H');
-         $timenw   = '16';
+         $timenw   = '05';
         foreach ($times as $index => $time){
             switch(true)
                 {
@@ -95,18 +95,29 @@ class SalesController extends Controller
     public function insertsales(Request $request)
     {
         $Sales = sales::whereDate('created_at', Carbon::today())->where('time_id',$request->time_sales)->where('branch_id',$request->branch)->get();
+
             if($Sales->count() > 0){
+
                 toastr()->info('You have send sales before . Edit Seles is done','Edit');
                 return Redirect::to('/new/sales');
             }else{
-                sales::create([
-                        'sales'     => $request->time_sales?$request->sales:null,
-                        'time_id'   => $request->time_sales??null,
-                        'branch_id' => $request->branch,
-                        'close'     => $request->time_sales?null:$request->sales,
-                        'tc'        => $request->ctc??null,
-                        'created_at' => (date("H") >= 0 && date("H") <= 8)? date('Y-m-d', strtotime("-1 day")):Carbon::now()
-                    ]);
+                $data = array(
+                    'sales'     => $request->time_sales?$request->sales:null,
+                    'time_id'   => $request->time_sales??null,
+                    'branch_id' => $request->branch,
+                    'close'     => $request->time_sales?null:$request->sales,
+                    'tc'        => $request->ctc??null,
+                    'created_at'=> (date("H") >= 0 && date("H") <= 8)? date('Y-m-d', strtotime("-1 day")):Carbon::now()
+                );
+
+                if($request->time_sales == null){
+                    $data1 =  $data ;
+                    $data1['branch_id'] = 'sss';
+                    dd( $data1);
+                    // sales::create($data);
+                }
+                sales::create($data);
+
                 toastr()->success('Send Seles','New');
                 return Redirect::to('/new/sales');
             }

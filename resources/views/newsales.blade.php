@@ -77,6 +77,14 @@
                                     <label for="ctc" class="form-label">T.C C.Y (عمليات حالى):</label>
                                     <input type="number" step="any" class="form-control" id="ctc" name="ctc" placeholder="" required>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="ltc" class="form-label">T.C L.Y (عمليات سابق):</label>
+                                    <input type="number" step="any" class="form-control" id="ltc" name="ltc" placeholder="" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lys" class="form-label">Sales L.Y (مبيعات سابق):</label>
+                                    <input type="number" step="any" class="form-control" id="lys" name="lys" placeholder="" required>
+                                </div>
                                 @endif
                             @endif
 
